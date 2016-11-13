@@ -1,0 +1,8 @@
+bigrams = LOAD 'hdfs://localhost:8020/tmp/inputSmall.tsv' AS (bigram:chararray, year:int, count:double, books:double);
+bigrams_groupped = GROUP bigrams by bigram;
+bigrams_summed = FOREACH bigrams_groupped GENERATE group as bigram, SUM(bigrams.count) as count_sum, SUM(bigrams.books) as books_sum;
+bigrams_average = FOREACH bigrams_summed GENERATE bigram, count_sum / books_sum as average;
+bigrams_average_sorted = ORDER bigrams_average BY average DESC;
+bigrams_average_sorted_limit10 = LIMIT bigrams_average_sorted 10;
+STORE bigrams_average_sorted_limit10 INTO 'hdfs://localhost:8020/tmp/task4outputSmall' using PigStorage('\t');
+
