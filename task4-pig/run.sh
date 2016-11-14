@@ -2,7 +2,7 @@
 
 #hadoop fs -copyFromLocal googlebooks-eng-all-2gram-20120701-de.gz /tmp/
 
-pig -x mapreduce pig-small.txt
+pig -x local pig.txt
 
 hadoop fs -getmerge /tmp/task4output/ task4output.tsv
 
